@@ -100,16 +100,9 @@ jobs:
                   echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main" | sudo tee -a /etc/apt/sources.list
                   sudo apt-get update
                   sudo apt-get install -y -qq gcc-arm-linux-gnueabihf libc6-armhf-cross libc6-dev-armhf-cross
-                  sudo apt-get download libasound2:armhf libasound2-dev:armhf libssl-dev:armhf libssl1.1:armhf
-                  sudo dpkg -x libasound2_*.deb /build/sysroot/
-                  sudo dpkg -x libssl-dev*.deb /build/sysroot/
-                  sudo dpkg -x libssl1.1*.deb /build/sysroot/
-                  sudo dpkg -x libasound2-dev*.deb /build/sysroot/
-                  echo "::set-env name=PKG_CONFIG_ALLOW_CROSS::1"
-                  echo "::set-env name=RUSTFLAGS::-C linker=arm-linux-gnueabihf-gcc -L/usr/arm-linux-gnueabihf/lib -L/build/sysroot/usr/lib/arm-linux-gnueabihf -L/build/sysroot/lib/arm-linux-gnueabihf"
-                  echo "::set-env name=C_INCLUDE_PATH::/build/sysroot/usr/include"
-                  echo "::set-env name=OPENSSL_LIB_DIR::/build/sysroot/usr/lib/arm-linux-gnueabihf"
-                  echo "::set-env name=OPENSSL_INCLUDE_DIR::/build/sysroot/usr/include/arm-linux-gnueabihf"
+                  dpkg --add-architecture armhf
+                  sudo apt-get update
+                  sudo apt install libasound2-plugins:armhf libasound2-dev:armhf libssl-dev:armhf libpulse-dev:armhf libdbus-1-dev:armhf libsystemd-dev:armhf libssl1.1:armhf libc6:armhf libstdc++6:armhf
             - name: Installing needed Ubuntu armv6 dependencies
               if: matrix.os == 'ubuntu-18.04' && matrix.build_target == 'linux-armv6'
               run: |
